@@ -1,0 +1,108 @@
+/**********自定义layui列表***************/
+
+.custom-layui-list{
+	width: 100%;
+	height: 100px;
+}
+
+.layui-list-title{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	background-color: #f3f3f5;
+}
+
+.list-title-colmun{
+	color: #000;
+	font-size: 14px;
+	text-align: center;
+	font-weight: 700;
+}
+
+.layui-list-row{
+	width: 100%;
+	border-bottom: 1px solid #a0a0a0;
+	height: 50px;
+}
+
+.list-row-colmun{
+	font-size: 14px;
+	text-align: center;
+	line-height: 50px;
+}
+
+.list-row-colmun2{
+	text-align: center;
+	margin-top: 8px;
+}
+
+.list-row-colmun2 span{
+	display: block;
+}
+
+.desc{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	cursor: pointer;
+}
+
+
+.width-8{
+	width: 8%;
+	float: left;
+}
+
+.width-12{
+	width: 12%;
+	float: left;
+}
+
+.width-16{
+	width: 16%;
+	float: left;
+}
+
+.layui-list-row-check{
+	color: #000;
+	text-align: center;
+	height: auto;
+	overflow: hidden;
+}
+.width-6{
+	width: 6%;
+	float: left;
+}
+
+.width-15{
+	width: 15%;
+	float: left;
+}
+.width-70{
+	width: 70%;
+	float: left;
+}
+
+.list-row-colmun a{
+	display: block;
+}
+
+.f2dede{
+	background-color: #f2dede;
+}
+
+.dff0d8{
+	background-color: #dff0d8;
+}
+.faf2cc{
+	background-color: #faf2cc;
+}
+.c4e3f3{
+	background-color: #c4e3f3;
+}
+.e8e8e8{
+	background-color: #e8e8e8;
+}
