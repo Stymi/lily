@@ -20,13 +20,15 @@ class ImageController extends Controller
 
     public function indexPage()
     {
-        
-    	return view('imageManage.indexPage');
+        $imagelist = $this->image->getImageList();
+    	return view('imageManage.indexPage')->with('imagelist',$imagelist);
     }
 
     public function uploadImagePage()
     {
-    	return view('imageManage.uploadImagePage');
+        $categorylist = $this->image->getCategoryListAll();
+
+    	return view('imageManage.uploadImagePage')->with('categorylist',$categorylist);
     }
 
     public function imageCategory()
@@ -44,6 +46,23 @@ class ImageController extends Controller
         $imageCategory = $this->image->getCategoryList();
         return view('imageManage.imageCategoryList')->with('imageCategory',$imageCategory);
     }
+
+    public function createImageFile(Request $request)
+    {
+        return $this->image->createImageFile($request);
+    }
+
+    public function deleteImageFile(Request $request)
+    {
+        return $this->image->deleteImageFile($request);
+    }
+
+    public function getImageListByCatIDLimit(Request $request)
+    {
+        return $this->image->getImageListByCatIDLimit($request->input('catid'),$request->input('limit'),$request->input('offset'));
+    }
+
+    
 
    
 }

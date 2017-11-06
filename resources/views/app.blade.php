@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="_token" content="{{ csrf_token() }}"/>
 	<title>名嘉金服</title>
 
 	<!-- Bootstrap -->
@@ -16,7 +16,7 @@
     <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 
     <!-- Custom Theme Style 侧边栏 -->
-    <link href="{{ asset('build/css/custom.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('build/css/custom.css') }}" rel="stylesheet">
 
     @yield('plugins')
 </head>

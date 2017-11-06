@@ -7,15 +7,17 @@ use App\Http\Controllers\Controller;
 
 use App\Service\admin\expertUserService;
 use App\Service\admin\roomService;
+use App\Service\admin\imageService;
 
 use App\Tools\MessageResult;
 
 class expertManageController extends Controller
 {
 
-	function __construct(expertUserService $expertusersService , roomService $roomService){
+	function __construct(expertUserService $expertusersService , roomService $roomService , imageService $imageservice){
 		$this->expertuser = $expertusersService;
         $this->room = $roomService;
+        $this->image = $imageservice;
 	}
 
     public function indexPage()
@@ -32,20 +34,13 @@ class expertManageController extends Controller
 
     public function createExpertUser(Request $request)
     {
+        return $this->expertuser->createExpertUser($request);
+    }
 
-        $create = $this->expertuser->createExpertUser($request->input());
-        
-        $jsonResult = new MessageResult();
-
-        if ($create == 1) {
-            $jsonResult->statusCode = 1;
-            $jsonResult->statusMsg = "success";
-        }else{
-            $jsonResult->statusCode = 0;
-            $jsonResult->statusMsg = "error";
-        }
-
-        return response($jsonResult->toJson());
+    public function checkDefaultImg($id = 0)
+    {
+        $imagelist = $this->expertuser->getUserHeading();
+        return view('modelsPage.checkDefaultImg')->with('imagelist',$imagelist);
     }
 
 

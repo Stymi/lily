@@ -23,8 +23,15 @@
 	border-radius: 40px;
 	float: left;
 }
+.techerimg img{
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	margin-top: -4px;
+}
 .layui-upload-button{
 	margin-left: 20px;
+	cursor: pointer;
 }
 </style>
 @endsection
@@ -73,11 +80,6 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">是否展示</label>
-						<div class="layui-input-block">
-							<input type="checkbox" name="switch" lay-skin="switch"></div>
-					</div>
-					<div class="layui-form-item">
 						<label class="layui-form-label">是否禁用</label>
 						<div class="layui-input-block">
 							<input type="radio" name="type" value="0" title="禁用">
@@ -87,9 +89,20 @@
 						<label class="layui-form-label" style="margin-top: 22px;">老师头像</label>
 						<div class="layui-input-block">
 							<div class="techerimg">
-								<img src="{{ asset('file/img/img2.png') }}" style="width: 100%;">
+								<img style="width: 100%;" id="xmTanImg">
 							</div>
-							<input type="file" name="file" class="layui-upload-file">
+							<input type="hidden" name="imgtype" id="imgtype" value="1">
+							<input type="hidden" name="headimg" value="http://image.find37.com/150950669959f93e8bd547b.png">
+							<div class="layui-box layui-upload-button">
+								<input type="file" name="file" class="layui-upload-file" id="xdaTanFileImg" onchange="xmTanUploadImg(this)">
+								<span class="layui-upload-icon"> <i class="layui-icon">&#xe61f;</i>
+									上传图片
+								</span>
+							</div>
+							<div class="layui-btn layui-btn-primary" style="height: 36px; line-height:36px;" onclick="checkdefaultimg()">
+								<i class="layui-icon" style="color: #5FB878;margin-right: 5px;">&#xe64a;</i>
+								选择默认头像
+							</div>
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
@@ -117,20 +130,34 @@
 <script type="text/javascript">
 	
 	layui.use(['form','upload'], function(){
+		if (typeof FileReader == 'undefined') {
+			layer.msg("当前浏览器不支持FileReader接口",{
+				icon:2
+			})
+	        document.getElementById("xmTanDiv").InnerHTML = "<h1>当前浏览器不支持FileReader接口</h1>";
+	        //使选择控件不可操作
+	        document.getElementById("xdaTanFileImg").setAttribute("disabled", "disabled");
+	    }
+
   		var form = layui.form();
-  		layui.upload({});
+  	
   		form.on('submit(formSubimt)', function(data){
-  			var load = layer.load(2);
+  			// var load = layer.load(2);
+  			var formData = new FormData($('form')[0]); 
+  			formData.append('file',$(':file')[0].files[0]);
+
     		$.ajax({
 		  		url : "{{ URL::to('expertManage/createExpertUser') }}",
 		        type : "POST",
 		        dataTpye : "json",
-		        data : data.field,
+		        data : formData,
+		        contentType: false,
+		        processData: false,
 		        success:function(res){
 
 		        	var obj = eval('(' + res + ')');
 
-		        	layer.close(load);
+		        	// layer.close(load);
 
 		        	if (obj.statusCode == 1) {
 		        		layer.confirm('添加成功', {
@@ -151,6 +178,63 @@
     		return false;
   		});
 	});
+
+	//选择图片，马上预览
+    function xmTanUploadImg(obj) {
+        var file = obj.files[0];
+        console.log(file);
+        console.log("file.type = " + file.type);  //file.size 单位为byte
+
+        if (file.type !== "image/jpeg"  && file.type !== "image/jpg" && file.type !== "image/png" && file.type !== "image/gif") {
+        	layer.msg("请上传图片",{
+        		icon : 0
+        	})
+        	return false;
+        }
+
+        var reader = new FileReader();
+
+        //读取文件过程方法
+        reader.onloadstart = function (e) {
+            console.log("开始读取....");
+        }
+        reader.onprogress = function (e) {
+            console.log("正在读取中....");
+        }
+        reader.onabort = function (e) {
+        	layer.msg("中断读取....",{
+				icon:2
+			})
+            console.log("中断读取....");
+        }
+        reader.onerror = function (e) {
+        	layer.msg("读取异常....",{
+				icon:0
+			})
+            console.log("读取异常....");
+        }
+        reader.onload = function (e) {
+            console.log("成功读取....");
+
+            var img = document.getElementById("xmTanImg");
+            img.src = e.target.result;
+            $("#imgtype").val(2);
+            //或者 img.src = this.result;  //e.target == this
+        }
+
+        reader.readAsDataURL(file)
+    }
+
+    function checkdefaultimg() {
+    	layer.open({
+		  	type: 2,
+		  	area: ['650px', '450px'],
+		  	title: "选择图片",
+		  	fixed: false, //不固定
+		  	maxmin: true,
+		  	content: "{{ URL::to('expertManage/checkDefaultImg/1') }}"
+		});
+    }
 
 </script>
 @endsection

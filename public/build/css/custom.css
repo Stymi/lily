@@ -3110,6 +3110,14 @@ ul.project_files li a i {
     height: 120px;
     overflow: hidden
 }
+
+.thumbnail .image img{
+    height: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
 .caption {
     padding: 9px 5px;
     background: #F7F7F7
