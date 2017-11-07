@@ -24,12 +24,19 @@ Route::get('/', function () {
 |
 */
 
+//-----老师账号管理
 Route::get('expertManage/indexPage','admin\expertManageController@indexPage');
 Route::get('expertManage/createPage','admin\expertManageController@createPage');
 Route::get('expertManage/checkDefaultImg/{id}','admin\expertManageController@checkDefaultImg');
+
 Route::post('expertManage/createExpertUser','admin\expertManageController@createExpertUser');
 
 
+//----普通用户
+
+
+
+//-----综合管理图片管理
 Route::get('imageManage/indexPage','admin\ImageController@indexPage');
 Route::get('imageManage/uploadImagePage','admin\ImageController@uploadImagePage');
 Route::get('imageManage/imageCategory','admin\ImageController@imageCategory');

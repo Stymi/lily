@@ -92,7 +92,7 @@
 								<img style="width: 100%;" id="xmTanImg">
 							</div>
 							<input type="hidden" name="imgtype" id="imgtype" value="1">
-							<input type="hidden" name="headimg" value="http://image.find37.com/150950669959f93e8bd547b.png">
+							<input type="hidden" name="headimg" id="headimg" value="http://image.find37.com/150950669959f93e8bd547b.png">
 							<div class="layui-box layui-upload-button">
 								<input type="file" name="file" class="layui-upload-file" id="xdaTanFileImg" onchange="xmTanUploadImg(this)">
 								<span class="layui-upload-icon"> <i class="layui-icon">&#xe61f;</i>
@@ -142,7 +142,7 @@
   		var form = layui.form();
   	
   		form.on('submit(formSubimt)', function(data){
-  			// var load = layer.load(2);
+  			var load = layer.load(2);
   			var formData = new FormData($('form')[0]); 
   			formData.append('file',$(':file')[0].files[0]);
 
@@ -157,7 +157,7 @@
 
 		        	var obj = eval('(' + res + ')');
 
-		        	// layer.close(load);
+		        	layer.close(load);
 
 		        	if (obj.statusCode == 1) {
 		        		layer.confirm('添加成功', {

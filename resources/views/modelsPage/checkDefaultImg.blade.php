@@ -56,7 +56,7 @@
 	<div class="content">
 		
 		@foreach($imagelist->list as $image)
-			<div class="img-item">
+			<div class="img-item" onclick="checkImg(this)">
 				<img src="{{ $image->url }}-live">
 				<span>{{ $image->title }}</span>
 			</div>
@@ -65,8 +65,9 @@
 	</div>
 
 	<fieldset class="layui-elem-field layui-field-title" id="demo1" style="margin-top: 20px;">
-	  <legend>开门见山 ： 默认分页</legend>
 	</fieldset>
+
+	<button class="layui-btn" style="margin-left: 20px;position: absolute;bottom: 60;" onclick="checkClose()">确定</button>
 
 </div>
 
@@ -78,13 +79,16 @@
 
 	var index = parent.layer.getFrameIndex(window.name);
 
-	$(".img-item").click(function(){
+	function checkImg(_this){
 		$(".img-item").removeClass("selected");
-		$(this).addClass("selected");
-		var url = $(this).children("img").attr("src");
+		$(_this).addClass("selected");
+		var url = $(_this).children("img").attr("src");
 		parent.$("#xmTanImg").attr("src",url);
+		var val = url.replace('-live','');
 		console.log(url);
-	})
+		parent.$("#headimg").val(val);
+		console.log(val);
+	}
 
 	layui.use(['laypage', 'layer'], function(){
 	  	var laypage = layui.laypage
@@ -95,7 +99,7 @@
 		    ,groups: 5 //连续显示分页数
 		  	,pages: {{ $imagelist->page }} //总页数
 		    ,count: {{ $imagelist->count }}
-		    ,limit : 10
+		    ,limit : 2
 		    ,curr : 1
 		    ,layout: ['prev', 'next']
 		    ,jump : function(obj, first){
@@ -113,7 +117,7 @@
 				        	var res = eval('(' + data + ')');
 				        	var a = '';
 				        	for (var i = res.list.length - 1; i >= 0; i--) {
-				        		a += '<div class="img-item">'
+				        		a += '<div class="img-item" onclick="checkImg(this)">'
 								a += '	<img src="'+res.list[i].url+'-live">'
 								a += '	<span>'+res.list[i].title+'</span>'
 								a += '</div>'
@@ -124,10 +128,11 @@
 		    	}
 		    }
 	  	});
-	  
-
-	  
 	});
+
+	function checkClose() {
+		parent.layer.close(index);
+	}
 	
 
 </script>

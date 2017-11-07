@@ -94,17 +94,17 @@ class expertUserService
 
 	public function getUserHeading()
 	{
-		$list = Image::select('id','title','url')->where('c_id',1)->where('status',1)->offset(0)->limit(10)->get();
+		$list = Image::select('id','title','url')->where('c_id',1)->where('status',1)->offset(0)->limit(2)->get();
 
 		$count = Image::where('c_id',1)->where('status',1)->count();
 
-		if ($count < 10) {
+		if ($count < 2) {
 			$page = 1;
 		}
-		elseif (($count % 10) == 0) {
-			$page = $count / 10;
+		elseif (($count % 2) == 0) {
+			$page = $count / 2;
 		}else{
-			$page = ($count / 10) + 1;
+			$page = ($count / 2) + 1;
 		}
 
 		$jsonResult = new MessageResult();
