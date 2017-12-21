@@ -36,12 +36,30 @@
                             <a href="{{ URL::to('expertManage/createPage') }}">添加老师账号</a>
                         </li>
                         <li>
-                            <a href="#">用户账号管理</a>
+                            <a href="{{ URL::to('ordinaryUser/indexPage') }}">用户账号管理</a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('ordinaryUser/createPage') }}">添加用户账号</a>
                         </li>
                     </ul>
                 </li>
-        
-          
+            </ul>
+
+            <ul class="nav side-menu">
+                <li>
+                    <a> <i class="fa fa-male"></i>
+                        直播室管理
+                        <span class="fa fa-chevron-down"></span>
+                    </a>
+                    <ul class="nav child_menu">
+                        <li>
+                            <a href="{{ URL::to('roomManage/indexPage') }}">直播室管理</a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('roomManage/createPage') }}">添加直播室</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
 

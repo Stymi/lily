@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('userlogin','apiController@userLogin');
+
+Route::get('getImageList','apiController@getImageList');
+
+Route::post('getUserListByLimit','apiController@getUserListByLimit');

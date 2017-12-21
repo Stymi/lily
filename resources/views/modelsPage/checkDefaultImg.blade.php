@@ -99,7 +99,7 @@
 		    ,groups: 5 //连续显示分页数
 		  	,pages: {{ $imagelist->page }} //总页数
 		    ,count: {{ $imagelist->count }}
-		    ,limit : 2
+		    ,limit : 10
 		    ,curr : 1
 		    ,layout: ['prev', 'next']
 		    ,jump : function(obj, first){

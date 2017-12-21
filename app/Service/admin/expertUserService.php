@@ -23,12 +23,27 @@ class expertUserService
 		return ExpertUsers::paginate(20);
 	}
 
+	public function getExpertUserList()
+	{
+		return ExpertUsers::select('id','nickname')->get();
+	}
+
 	public function createExpertUser($request)
 	{
 		$jsonResult = new MessageResult();
 
 		$param = $request->input();
 		$file = $request->file('file');
+
+		$count = ExpertUsers::where('nickname',$param['nickname'])->orWhere('username',$param['username'])->count();
+
+		if ($count > 0) {
+			$jsonResult->statusCode = 0;
+            $jsonResult->statusMsg = "error";
+            $jsonResult->extra = "用户【".$param['nickname']."|".$param['username']."】已存在";
+
+            return response($jsonResult->toJson());
+		}
 
 		$headimg = $param['headimg'];
 
@@ -38,7 +53,8 @@ class expertUserService
 
 			if ($result->statusCode !== 1) {
 				$jsonResult->statusCode  = 0;
-	        	$jsonResult->statusMsg = $result->statusMsg;
+	        	$jsonResult->statusMsg = "error";
+	        	$jsonResult->extra = $result->statusMsg;
 
 	        	return response($jsonResult->toJson());
 			}
@@ -60,32 +76,34 @@ class expertUserService
 			$expertUser->password 	= Hash::make($param['password']);
 		}
 		
-		$expertUser->msg 		= $param['msg'];
+		$expertUser->msg 			= $param['msg'];
 
-		$expertUser->headimg	= $headimg;
+		$expertUser->headimg		= $headimg;
 
-		$room = '';
+		// $room = '';
 
-		foreach ($param['room'] as $key => $val) {
-			if ($val == 'on') {
-				if ($room == '') {
-					$room = $key;
-				}else{
-					$room .= '|'.$key;
-				}
-			}
-		}
+		// foreach ($param['room'] as $key => $val) {
+		// 	if ($val == 'on') {
+		// 		if ($room == '') {
+		// 			$room = $key;
+		// 		}else{
+		// 			$room .= '|'.$key;
+		// 		}
+		// 	}
+		// }
 
-		$expertUser->room 			= $room;
+		$expertUser->authority 			= $param['authority'];
 
 		$expertUser->created_at = date('Y-m-d H:i:s');
 
 		if ($expertUser->save()) {
             $jsonResult->statusCode = 1;
             $jsonResult->statusMsg = "success";
+            $jsonResult->extra = "添加成功!";
         }else{
             $jsonResult->statusCode = 0;
             $jsonResult->statusMsg = "error";
+            $jsonResult->extra = "写入数据库失败!";
         }
 
         return response($jsonResult->toJson());
@@ -94,17 +112,17 @@ class expertUserService
 
 	public function getUserHeading()
 	{
-		$list = Image::select('id','title','url')->where('c_id',1)->where('status',1)->offset(0)->limit(2)->get();
+		$list = Image::select('id','title','url')->where('c_id',1)->where('status',1)->offset(0)->limit(10)->get();
 
 		$count = Image::where('c_id',1)->where('status',1)->count();
 
-		if ($count < 2) {
+		if ($count < 10) {
 			$page = 1;
 		}
-		elseif (($count % 2) == 0) {
-			$page = $count / 2;
+		elseif (($count % 10) == 0) {
+			$page = $count / 10;
 		}else{
-			$page = ($count / 2) + 1;
+			$page = ($count / 10) + 1;
 		}
 
 		$jsonResult = new MessageResult();

@@ -32,7 +32,19 @@ Route::get('expertManage/checkDefaultImg/{id}','admin\expertManageController@che
 Route::post('expertManage/createExpertUser','admin\expertManageController@createExpertUser');
 
 
-//----普通用户
+//-----普通账号管理
+Route::get('ordinaryUser/indexPage','admin\ordinaryUserController@indexPage');
+Route::get('ordinaryUser/createPage','admin\ordinaryUserController@createPage');
+
+Route::post('ordinaryUser/createOrdinaryUser','admin\ordinaryUserController@createOrdinaryUser');
+
+
+//----直播室管理
+Route::get('roomManage/indexPage','admin\roomManageController@indexPage');
+Route::get('roomManage/createPage','admin\roomManageController@createPage');
+
+Route::post('roomManage/createRoom','admin\roomManageController@createRoom');
+Route::post('roomManage/roomListPaging','admin\roomManageController@roomListPaging');
 
 
 

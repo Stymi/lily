@@ -40,7 +40,7 @@
 <div>
 	<div class="page-title">
 		<div class="title_left">
-			<h3>添加老师账号</h3>
+			<h3>添加用户账号</h3>
 		</div>
 
 	</div>
@@ -54,9 +54,9 @@
 				<form class="layui-form" action="">
 					{{ csrf_field() }}
 					<div class="layui-form-item">
-						<label class="layui-form-label">姓名</label>
+						<label class="layui-form-label">用户名</label>
 						<div class="layui-input-block">
-							<input type="text" name="nickname" required  lay-verify="required" placeholder="请输入老师姓名" autocomplete="off" class="layui-input"></div>
+							<input type="text" name="nickname" placeholder="请输入用户名 , 可不填" autocomplete="off" class="layui-input"></div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">账号</label>
@@ -70,11 +70,19 @@
 						<div class="layui-form-mid layui-word-aux">不填写则默认密码与账号一致</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">账号权限</label>
+						<label class="layui-form-label">用户权限</label>
 						<div class="layui-input-block">
-							<input type="radio" name="authority" value="1" title="主管理" checked="">
-							<input type="radio" name="authority" value="2" title="直播老师">
-							<input type="radio" name="authority" value="3" title="民间老师">
+							<input type="checkbox" name="authority[live]" title="直播室" nameval="live" lay-filter="authority" id="checkedLive">
+							<input type="checkbox" name="authority[wechat]" title="小程序" nameval="wechat" lay-filter="authority"></div>
+					</div>
+					<div class="layui-form-item" id="liveRoom" style="display: none;">
+						<label class="layui-form-label">直播室</label>
+						<div class="layui-input-block">
+							@if($roomlist != null)
+								@foreach($roomlist as $room)
+							<input type="radio" name="room" title="{{ $room->name }}" value="{{ $room->id }}">
+								@endforeach
+							@endif
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -84,27 +92,19 @@
 							<input type="radio" name="type" value="1" title="启用" checked></div>
 					</div>
 					<div class="layui-form-item" style="line-height: 80px;">
-						<label class="layui-form-label" style="margin-top: 22px;">老师头像</label>
+						<label class="layui-form-label" style="margin-top: 22px;">用户头像</label>
 						<div class="layui-input-block">
 							<div class="techerimg">
-								<img style="width: 100%;" id="xmTanImg">
-							</div>
-							<input type="hidden" name="imgtype" id="imgtype" value="1">
-							<input type="hidden" name="headimg" id="headimg" value="http://image.find37.com/150950669959f93e8bd547b.png">
-							<div class="layui-box layui-upload-button">
-								<input type="file" name="file" class="layui-upload-file" id="xdaTanFileImg" onchange="xmTanUploadImg(this)">
-								<span class="layui-upload-icon"> <i class="layui-icon">&#xe61f;</i>
-									上传图片
-								</span>
-							</div>
-							<div class="layui-btn layui-btn-primary" style="height: 36px; line-height:36px;" onclick="checkdefaultimg()">
-								<i class="layui-icon" style="color: #5FB878;margin-right: 5px;">&#xe64a;</i>
+								<img style="width: 100%;" src="{{ $img->url }}-live" id="xmTanImg"></div>
+							<input type="hidden" name="headimg" id="headimg" value="{{ $img->
+							url }}">
+							<div class="layui-btn layui-btn-primary" style="height: 36px; line-height:36px;margin-left: 20px;" onclick="checkdefaultimg()"> <i class="layui-icon" style="color: #5FB878;margin-right: 5px;">&#xe64a;</i>
 								选择默认头像
 							</div>
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
-						<label class="layui-form-label">老师简介</label>
+						<label class="layui-form-label">用户描述</label>
 						<div class="layui-input-block">
 							<textarea name="msg" placeholder="请输入内容" class="layui-textarea"></textarea>
 						</div>
@@ -138,35 +138,54 @@
 	    }
 
   		var form = layui.form();
+
+  		form.on('checkbox(authority)', function(data){
+  			var nameval = data.elem.attributes.nameval.value;
+  			if (nameval == "live") {
+  				if (data.elem.checked === true) {
+  					$("#liveRoom").css('display','block')
+  				}else{
+  					$("#liveRoom").css('display','none')
+  				}
+  			}
+  	
+		});  
   	
   		form.on('submit(formSubimt)', function(data){
-  			var load = layer.load(2);
-  			var formData = new FormData($('form')[0]); 
-  			formData.append('file',$(':file')[0].files[0]);
+  			
+  			// var load = layer.load(2);
+  			var radio = $('input:radio[name="room"]:checked').val();
+  	
+  			if($('#checkedLive').is(':checked')) {
+			    if (radio == undefined || radio == null || radio == '') {
+	  				layer.msg("请选择直播室",{
+	  					icon : 0
+	  				});
+	  				return false;
+	  			}
+			}
 
     		$.ajax({
-		  		url : "{{ URL::to('expertManage/createExpertUser') }}",
+		  		url : "{{ URL::to('ordinaryUser/createOrdinaryUser') }}",
 		        type : "POST",
 		        dataTpye : "json",
-		        data : formData,
-		        contentType: false,
-		        processData: false,
+		        data : data.field,
 		        success:function(res){
 
 		        	var obj = eval('(' + res + ')');
 
-		        	layer.close(load);
+		        	// layer.close(load);
 
 		        	if (obj.statusCode == 1) {
 		        		layer.confirm('添加成功', {
 						  btn: ['前往列表页','留在本页'] //按钮
 						}, function(){
-						  	window.location.href = "{{ URL::to('expertManage/indexPage') }}";
+						  	window.location.href = "{{ URL::to('ordinaryUser/indexPage') }}";
 						}, function(){
-						  	window.location.href = "{{ URL::to('expertManage/createPage') }}";
+						  	window.location.href = "{{ URL::to('ordinaryUser/createPage') }}";
 						});
 		        	}else{
-		        		layer.msg(obj.extra,{icon : 2});
+		        		layer.msg("未知原因失败",{icon : 2});
 		        	}
 		        },
 		        error:function(err){
@@ -233,6 +252,8 @@
 		  	content: "{{ URL::to('expertManage/checkDefaultImg/1') }}"
 		});
     }
+
+   	
 
 </script>
 @endsection

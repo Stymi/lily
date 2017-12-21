@@ -174,6 +174,7 @@ class imageService
 		return response($jsonResult->toJson());
 	}
 
+	//----layui-laypage获取图片分页
 	public function getImageListByCatIDLimit($catid = 0 , $limit = 10 , $offset = 0)
 	{
 		$curr = $offset + 1;
@@ -193,7 +194,17 @@ class imageService
 		return response($jsonResult->toJson());
 	}
 
-	
+	//--获取随机一张头像图片
+	public function getRandHeadImg()
+	{	
+		$jsonResult = new MessageResult();
+		$imgArr = Image::select('id','url','imgkey')->where('c_id',1)->where('status',1)->get()->toArray();
+		$rand = array_rand($imgArr,1);
+		$jsonResult->url = $imgArr[$rand]['url'];
+		$jsonResult->id = $imgArr[$rand]['id'];
+		$jsonResult->imgkey = $imgArr[$rand]['imgkey'];
+		return $jsonResult;
+	}
 
 	//------上传到七牛云
 	public function imageUploadQiniu($file)

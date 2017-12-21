@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'imageManage/createImageFile',
-        'imageManage/getImageListByCatIDLimit'
+        'imageManage/getImageListByCatIDLimit',
+        'roomManage/roomListPaging'
     ];
 }
